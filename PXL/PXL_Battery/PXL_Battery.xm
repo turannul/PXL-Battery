@@ -6,8 +6,9 @@ NSString *img(NSString *img){
 }
 
 %group PXLBattery
-
 %hook _UIBatteryView
+
+- (bool) _showsInlineChargingIndicator {return NO;}
 - (bool) _shouldShowBolt {return NO;} // hide charging bolt
 - (id) _batteryFillColor {return [UIColor clearColor];} // hide the fill
 - (id) bodyColor {return [UIColor clearColor];} // hide the body
@@ -15,27 +16,12 @@ NSString *img(NSString *img){
 - (CGFloat) bodyColorAlpha {return 0.0;} // hide battery body again
 - (CGFloat) pinColorAlpha {return 0.0;} // hide battery pin again
 
-
-/*-(void)_commonInit{
-	%orig;
-	[[UIDevice currentDevice] setBatteryMonitoringEnabled:true];// make iOS monitor the battery
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getCurrentBattery) name:UIDeviceBatteryLevelDidChangeNotification object:nil];// add observer for battery level
-	[self getCurrentBattery];// get charge percent
-}*/
-
-/*%new
--(double) getCurrentBattery{
-	double currentBattery = [[UIDevice currentDevice] batteryLevel];// the current battery level
-	intBattery = currentBattery * 100;// battery level multiplied by 100 for easier casting to int
-	locations = @[@0.0, @(currentBattery), @(currentBattery), @1.0];// fill extends from 0% to battery, empty extends from battery to 100%
-	//[self addIcon];
-	return currentBattery;
-}*/
-
 //-----------------------------------------------
-// Keep updating icon
--(void)_updateFillLayer{ %orig;
-	[self refreshIcon];
+// Keep refreshing 
+
+-(void)_updateFillLayer
+{ 
+	[self refreshIcon]; 
 }
 
 -(void)setSaverModeActive:(bool)arg1 {
@@ -43,36 +29,13 @@ NSString *img(NSString *img){
 	[self refreshIcon];
 }
 
-/*-(UIColor *)boltColor{
-	return [UIColor colorWithRed:1.0f green:0.79f blue:0.28f alpha:1.0f];
-}*/
-
 -(void)setChargingState:(long long)arg1{
 	%orig;
 	isCharging = (arg1 == 1); // state of 1 means currently charging
 	[self refreshIcon];
 }
-
--(bool)_showsInlineChargingIndicator {return NO;}
-
 //-----------------------------------------------
-
-/*-(BOOL)isLowBattery{
-	return NO;
-}*/
-//-----------------------------------------------
-/*-(UIColor *)fillColor{// Alpha magic
-	return [%orig colorWithAlphaComponent:0.00]; 
-}
-
--(UIColor *)bodyColor{
-	return [%orig colorWithAlphaComponent:0.00]; 
-}
--(UIColor *)pinColor{
-	return [%orig colorWithAlphaComponent:0.00];
-}*/
-//-----------------------------------------------
-// Actual mess is this// maybe not
+// Main
 -(CGFloat)chargePercent{// update corresponding battery percentage
 	CGFloat orig = %orig;
 	actualPercentage = orig * 100;
@@ -80,8 +43,8 @@ NSString *img(NSString *img){
 	return orig;
 }
 
-- (void) didMoveToWindow {
-	%orig;
+- (void) didMoveToWindow 
+{
 	[self refreshIcon];
 }
 
@@ -94,7 +57,6 @@ NSString *img(NSString *img){
 	for (UIImageView* imageView in [self subviews]) 
 		[imageView removeFromSuperview];
 
-	// face
 	if (!icon){
 		icon = [[UIImageView alloc] initWithFrame:[self bounds]];
 		[icon setContentMode:UIViewContentModeScaleAspectFill];
@@ -102,14 +64,7 @@ NSString *img(NSString *img){
 		if (![icon isDescendantOfView:self]) [self addSubview:icon];
 	}
 
-	// charger
 	if (!fill){
-/*		fill = [[UIImageView alloc] initWithFrame:[self bounds]];
-		[fill setContentMode:UIViewContentModeScaleAspectFill];
-		[fill setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-		//[fill setImage:[UIImage imageWithContentsOfFile:@"var/mobile/Library/PXLBattery/ChargingLS.png"]];
-		if (![fill isDescendantOfView:self])
-			[self addSubview:fill];*/
 		int tickCt = 0;
 
 		if (actualPercentage >= 80)
@@ -134,17 +89,12 @@ NSString *img(NSString *img){
 
 		for (int i = 1; i <= tickCt; ++i) {
 			UIView *fill = [[UIView alloc] initWithFrame: CGRectMake(iconLocationX 
- + ((i-1)*(barWidth + 1))/* / i) - 25*/, iconLocationY, barWidth, barHeight /*(icon.frame.size.width / 5) - (icon.frame.size.width / 15)*/)];
+ + ((i-1)*(barWidth + 1)), iconLocationY, barWidth, barHeight)];
 			[fill setContentMode:UIViewContentModeScaleAspectFill];
 			[fill setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-			//fill.frame.origin = icon.frame.origin;
 
-		//fill.frame = icon.bounds;
-		//fill.frame.size.width = (fill.frame.size.width /i) - 25, 0;
-			//fill.layer.borderColor = [UIColor blackColor].CGColor;
-			//fill.layer.borderWidth = 1.0f;
-			
-
+//-----------------------------------------------
+			// Colors
 if ([self saverModeActive]){
 if (isCharging){
 //Yellow
@@ -165,71 +115,21 @@ fill.backgroundColor = [UIColor labelColor];
 fill.backgroundColor = [UIColor colorWithRed:234.0/255.0 green:51.0/255.0 blue:35.0/255.0 alpha:1.0f];
 				}
 			}
-			//icon.layer.mask = fill;
 			[self addSubview: fill];
 		}
-		
-		
-
-		
-		
-		
-		
-		//fill = [[UIImageView alloc] initWithFrame:[self bounds]];
-		//[fill setContentMode:UIViewContentModeScaleAspectFill];
-		//[fill setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-		//[fill setImage:[UIImage imageWithContentsOfFile:@"var/mobile/Library/PXLBattery/ChargingLS.png"]];
-//		if (![fill isDescendantOfView:self])
-		
-
-
-//		[icon addSubview:fill];
 	}
 
+//-----------------------------------------------
+	// Frame
 	NSString *battery = nil;
-//	NSString *fill = nil;
 
-/*	if ([self saverModeActive]){
-		battery = img(@"LPM");//low power charging
-		//  <= = >= 
-	}else{*/
-/*	if (actualPercentage >= 80){
-		battery = img(@"A");
-	}else if (actualPercentage >= 60){
-		battery = img(@"B");
-	}else if (actualPercentage >= 40){
-		battery = img(@"C");
-	}else if (actualPercentage >= 20){
-		battery = img(@"D");
-	}else if (actualPercentage >= 10){
-		battery = img(@"E");
-	}else if (actualPercentage >= 5){*/
 		battery = img(@"F");
-	/*}else{
-		battery = img(@"G");
-	}*/
-//	}
 
 	[icon setImage:[UIImage imageWithContentsOfFile:battery]];
 
 	[self updateIconColor];
-/*	id chargedFill = (id)[[UIColor whiteColor] CGColor]; // use the original image colour for the battery section
-	id drainedFill = (id)[[UIColor colorWithWhite:1 alpha:0.5] CGColor]; // faded in uncharged area
-
-	CAGradientLayer* fill = [CAGradientLayer layer];
-	fill.frame = icon.bounds;
-
-	fill.colors = @[chargedFill, chargedFill, drainedFill, drainedFill];
-
-	fill.locations = @[@0.0, @(actualPercentage), @(actualPercentage), @1.0];
-
-	fill.startPoint = CGPointZero;
-	fill.endPoint = CGPointMake(1.0, 0.0); // end at the end. i am very good at comments. people die if they are killed.
-//lol
-	//[fill setImage:[UIImage imageWithContentsOfFile:fill]];
-	icon.layer.mask = fill;*/
-}
-
+	}
+//-----------------------------------------------
 %new
 -(void)updateIconColor{
 	icon.image = [icon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -266,16 +166,7 @@ if (actualPercentage >= 10){
 	}
 }
 
-
-
 %end
-/*
-%hook CSBatteryFillView
-//Lock screen?
-//maybe later
-%end
-*/
-
 %end
 
 %ctor{
