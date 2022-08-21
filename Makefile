@@ -7,4 +7,5 @@ SUBPROJECTS += PXL/PXL_Battery
 SUBPROJECTS += PXL/PXL_Prefs
 
 include $(THEOS)/makefiles/common.mk
+SUBPROJECTS += xxxxxx
 include $(THEOS_MAKE_PATH)/aggregate.mk

@@ -1,4 +1,5 @@
 #import "PXL_Battery.h"
+#import "PXL_Settings.h"
 
 NSString *img(NSString *img){
 	return [NSString stringWithFormat:@"/var/mobile/Library/PXLBattery/%@.png", img];
@@ -13,6 +14,7 @@ NSString *img(NSString *img){
 - (id) pinColor {return [UIColor clearColor];} // hide the pin
 - (CGFloat) bodyColorAlpha {return 0.0;} // hide battery body again
 - (CGFloat) pinColorAlpha {return 0.0;} // hide battery pin again
+
 
 /*-(void)_commonInit{
 	%orig;
@@ -31,8 +33,8 @@ NSString *img(NSString *img){
 }*/
 
 //-----------------------------------------------
--(void)_updateFillLayer{// Keep updating icon
-	%orig;
+// Keep updating icon
+-(void)_updateFillLayer{ %orig;
 	[self refreshIcon];
 }
 
@@ -50,6 +52,8 @@ NSString *img(NSString *img){
 	isCharging = (arg1 == 1); // state of 1 means currently charging
 	[self refreshIcon];
 }
+
+-(bool)_showsInlineChargingIndicator {return NO;}
 
 //-----------------------------------------------
 
@@ -78,6 +82,7 @@ NSString *img(NSString *img){
 
 - (void) didMoveToWindow {
 	%orig;
+	[self refreshIcon];
 }
 
 %new
@@ -105,14 +110,6 @@ NSString *img(NSString *img){
 		//[fill setImage:[UIImage imageWithContentsOfFile:@"var/mobile/Library/PXLBattery/ChargingLS.png"]];
 		if (![fill isDescendantOfView:self])
 			[self addSubview:fill];*/
-		////HERE
-
-		
-		
-		
-		
-		
-		
 		int tickCt = 0;
 
 		if (actualPercentage >= 80)
@@ -123,8 +120,12 @@ NSString *img(NSString *img){
 			tickCt = 3;
 		else if (actualPercentage >= 20)
 			tickCt = 2;
-		else
+		else if (actualPercentage >= 10)
 			tickCt = 1;
+      else 
+         tickCt = 0;
+
+//You died, rejailbreak now!
 
 		float iconLocationX = icon.frame.origin.x + 2;
 		float iconLocationY = icon.frame.origin.y + 2.75;
@@ -142,25 +143,34 @@ NSString *img(NSString *img){
 		//fill.frame.size.width = (fill.frame.size.width /i) - 25, 0;
 			//fill.layer.borderColor = [UIColor blackColor].CGColor;
 			//fill.layer.borderWidth = 1.0f;
-			if ([self saverModeActive]){
-				if (isCharging){
-					fill.backgroundColor = [UIColor blueColor];
+			
+
+if ([self saverModeActive]){
+if (isCharging){
+//Yellow
+fill.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:204.0/255.0 blue:2.0/255.0 alpha:1.0f];
 				}else{
-					fill.backgroundColor = [UIColor yellowColor];
+//Yellow
+fill.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:204.0/255.0 blue:2.0/255.0 alpha:1.0f];
 				}
 			}else{
 				if (isCharging){
-					fill.backgroundColor = [UIColor greenColor];
+//Green
+fill.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:12.0/255.0 alpha:1.0f];
 				}else{
-					fill.backgroundColor = [UIColor labelColor];
+					if (actualPercentage >= 20)
+fill.backgroundColor = [UIColor labelColor];
+					else
+//Red
+fill.backgroundColor = [UIColor colorWithRed:234.0/255.0 green:51.0/255.0 blue:35.0/255.0 alpha:1.0f];
 				}
 			}
-			
 			//icon.layer.mask = fill;
 			[self addSubview: fill];
 		}
 		
 		
+
 		
 		
 		
@@ -215,6 +225,7 @@ NSString *img(NSString *img){
 
 	fill.startPoint = CGPointZero;
 	fill.endPoint = CGPointMake(1.0, 0.0); // end at the end. i am very good at comments. people die if they are killed.
+//lol
 	//[fill setImage:[UIImage imageWithContentsOfFile:fill]];
 	icon.layer.mask = fill;*/
 }
@@ -222,35 +233,35 @@ NSString *img(NSString *img){
 %new
 -(void)updateIconColor{
 	icon.image = [icon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	fill.image = [fill.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	fill.image = [fill.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]; //commented before.
 
-	if (![self saverModeActive]){
-		if (isCharging){
-			[icon setTintColor:[UIColor greenColor]];
-			[fill setTintColor:[UIColor greenColor]];
-		}else{
-			if (actualPercentage >= 20){
-				[icon setTintColor:[UIColor labelColor]];
-				[fill setTintColor:[UIColor labelColor]];
-			}else{
-				[icon setTintColor:[UIColor labelColor]];
-				[fill setTintColor:[UIColor redColor]];
+if (![self saverModeActive]){
+if (isCharging){
+[icon setTintColor:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:12.0/255.0 alpha:1.0f]];
+[fill setTintColor:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:12.0/255.0 alpha:1.0f]];
+}else{
+if (actualPercentage >= 20){
+[icon setTintColor:[UIColor labelColor]];
+[fill setTintColor:[UIColor labelColor]];
+}else{
+[icon setTintColor:[UIColor labelColor]];
+[fill setTintColor:fill.backgroundColor = [UIColor colorWithRed:234.0/255.0 green:51.0/255.0 blue:35.0/255.0 alpha:1.0f]];
 if (actualPercentage >= 10){
 [icon setTintColor:[UIColor labelColor]];
 [fill setTintColor:[UIColor labelColor]];
 }else{
-[icon setTintColor:[UIColor redColor]];
-[fill setTintColor:[UIColor redColor]];
+[icon setTintColor:fill.backgroundColor = [UIColor colorWithRed:234.0/255.0 green:51.0/255.0 blue:35.0/255.0 alpha:1.0f]];
+[fill setTintColor:fill.backgroundColor = [UIColor colorWithRed:234.0/255.0 green:51.0/255.0 blue:35.0/255.0 alpha:1.0f]];
 }
 			}
 		}
 	} else{
 		if (isCharging){
-			[icon setTintColor:[UIColor greenColor]];
-			[fill setTintColor:[UIColor greenColor]];
+			[icon setTintColor:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:12.0/255.0 alpha:1.0f]];
+			[fill setTintColor:[UIColor colorWithRed:0.0/255.0 green:255.0/255.0 blue:12.0/255.0 alpha:1.0f]];
 		}else{
-			[icon setTintColor:[UIColor yellowColor]];
-			[fill setTintColor:[UIColor yellowColor]];
+			[icon setTintColor:[UIColor colorWithRed:255.0/255.0 green:204.0/255.0 blue:2.0/255.0 alpha:1.0f]];
+			[fill setTintColor:[UIColor colorWithRed:255.0/255.0 green:204.0/255.0 blue:2.0/255.0 alpha:1.0f]];
 		}
 	}
 }
@@ -258,13 +269,18 @@ if (actualPercentage >= 10){
 
 
 %end
+/*
 %hook CSBatteryFillView
 //Lock screen?
-//target make gif when plugged 
+//maybe later
 %end
+*/
 
 %end
 
 %ctor{
-	%init(PXLBattery);
+	pxlSettings *_settings = [[pxlSettings alloc] init];
+	BOOL pxlEnabled = [_settings pxlEnabled];
+	if (pxlEnabled)
+		%init(PXLBattery);
 }

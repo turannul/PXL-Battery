@@ -4,15 +4,6 @@
 <dict>
 	<key>items</key>
 	<array>
-	<!--
-	Do i need this seems not
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-		</dict>
-	-->
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -21,9 +12,9 @@
 			<key>defaults</key>
 			<string>xyz.turannul.pxlbattery</string>
 			<key>key</key>
-			<string>isEnabled</string>
+			<string>pxlEnabled</string>
 			<key>label</key>
-			<string>Enabled</string>
+			<string>pxl Enabled</string>
 		</dict>
 	</array>
 	<key>title</key>

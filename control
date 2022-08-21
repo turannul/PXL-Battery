@@ -1,12 +1,9 @@
 Package: xyz.turannul.pxlbattery
 Name: PXL Battery
 Depends: mobilesubstrate, ws.hbang.common
-Version: 0.0.5~prerelease
+Version: 0.0.7~prerelease
 Architecture: iphoneos-arm
-Description: Battery indicator (maybe themer?) - Expect some bugs
- %20< views not colored.
- Preferences upcoming.
- Views Screwed :(
+Description: Battery indicator (and themer?) - Expect some bugs
 Maintainer: turannul
 Author: turannul x Randy420
 Section: Tweaks
