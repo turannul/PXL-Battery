@@ -1,4 +1,4 @@
 
 .theos/
+.build/
 .DS_Store
-*.deb
