@@ -14,7 +14,7 @@
 			<key>key</key>
 			<string>pxlEnabled</string>
 			<key>label</key>
-			<string>pxl Enabled</string>
+			<string>Enable PXL</string>
 		</dict>
 	</array>
 	<key>title</key>

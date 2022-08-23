@@ -1,9 +1,9 @@
 Package: xyz.turannul.pxlbattery
 Name: PXL Battery
 Depends: mobilesubstrate, ws.hbang.common
-Version: 0.0.7~prerelease
+Version: 1.0~release
 Architecture: iphoneos-arm
-Description: Battery indicator (and themer?) - Expect some bugs
+Description: Battery indicator (and themer?) 
 Maintainer: turannul
 Author: turannul x Randy420
 Section: Tweaks

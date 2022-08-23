@@ -1,4 +1,4 @@
-#import "PXL_Battery.h"
+#import "PXL_CC.h"
 #import "PXL_Settings.h"
 
 NSString *img(NSString *img){
@@ -6,8 +6,7 @@ NSString *img(NSString *img){
 }
 
 %group PXLBattery
-%hook _UIBatteryView
-//%hook _UIStaticBatteryView 
+%hook _UIStaticBatteryView 
 
 - (bool) _showsInlineChargingIndicator {return NO;}
 - (bool) _shouldShowBolt {return NO;} // hide charging bolt

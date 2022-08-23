@@ -4,6 +4,7 @@ export SYSROOT = $(THEOS)/sdks/iPhoneOS14.4.sdk
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 SUBPROJECTS += PXL/PXL_Battery
+SUBPROJECTS += PXL/PXL_CC
 SUBPROJECTS += PXL/PXL_Prefs
 
 include $(THEOS)/makefiles/common.mk

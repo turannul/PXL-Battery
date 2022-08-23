@@ -2,13 +2,13 @@ TARGET := iphone:clang:latest:7.0
 
 include $(THEOS)/makefiles/common.mk
 
-BUNDLE_NAME = pxl
+BUNDLE_NAME = PXL
 
-pxl_FILES = ryRootListController.m $(wildcard functions/*.m)
-pxl_FRAMEWORKS = UIKit
-pxl_PRIVATE_FRAMEWORKS = Preferences
-pxl_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
-pxl_INSTALL_PATH = /Library/PreferenceBundles
-pxl_CFLAGS = -fobjc-arc
+$(BUNDLE_NAME)_FILES = ryRootListController.m $(wildcard functions/*.m)
+$(BUNDLE_NAME)_FRAMEWORKS = UIKit
+$(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences
+$(BUNDLE_NAME)_EXTRA_FRAMEWORKS += Cephei CepheiPrefs
+$(BUNDLE_NAME)_INSTALL_PATH = /Library/PreferenceBundles
+$(BUNDLE_NAME)_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk

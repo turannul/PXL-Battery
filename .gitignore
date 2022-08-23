@@ -1,4 +1,4 @@
 
 .theos/
-.build/
+build/
 .DS_Store

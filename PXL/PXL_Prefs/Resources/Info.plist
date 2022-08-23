@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>pxl</string>
+	<string>PXL</string>
 	<key>CFBundleIdentifier</key>
 	<string>xyz.turannul.pxlbattery</string>
 	<key>CFBundleInfoDictionaryVersion</key>
