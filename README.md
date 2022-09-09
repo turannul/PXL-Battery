@@ -3,4 +3,4 @@
 
 "Your next bug is not a bug, it's a feature." - Apple Inc.
 
-#Bug status; none known
+# Bugs: No known bug/issue
