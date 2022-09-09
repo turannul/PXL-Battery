@@ -7,7 +7,7 @@ extern char **environ;
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		turannAppearanceSettings *AppearanceSettings = [[turannAppearanceSettings alloc] init];
+		TurannAppearanceSettings *AppearanceSettings = [[TurannAppearanceSettings alloc] init];
 
 		self.hb_appearanceSettings = AppearanceSettings;
 		self.navigationItem.titleView = [UIView new];
@@ -73,7 +73,7 @@ extern char **environ;
 
 - (void)link:(NSString *)link name:(NSString *)name {
 	name = [NSString stringWithFormat:@"Do you want to open %@?", name];
-	UIAlertController *ask = [UIAlertController alertControllerWithTitle:@"420 Tools"
+	UIAlertController *ask = [UIAlertController alertControllerWithTitle:@"PXL Battery"
 	message:name preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:link] options:@{} completionHandler:nil];
@@ -169,26 +169,6 @@ extern char **environ;
 - (void)viewDidLoad{
 	[super viewDidLoad];
 	[self reloadSpecifiers];
-/*
-	CGFloat height = [UIScreen mainScreen].bounds.size.height;
-	CGFloat width = [UIScreen mainScreen].bounds.size.width;
-	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,width,0.20 * width)];
-	self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,width,0.20 * width)];
-	self.credit = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,height)];
-	self.credit.text = @"";
-	self.headerImageView.contentMode = UIViewContentModeScaleToFill;
-	self.headerImageView.image = [UIImage imageNamed:myIcon inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil];
-	self.headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.headerView addSubview:self.headerImageView];
-
-	[NSLayoutConstraint activateConstraints:@[
-		[self.headerImageView.topAnchor constraintEqualToAnchor:self.headerView.topAnchor],
-		[self.headerImageView.leadingAnchor constraintEqualToAnchor:self.headerView.leadingAnchor],
-		[self.headerImageView.trailingAnchor constraintEqualToAnchor:self.headerView.trailingAnchor],
-		[self.headerImageView.bottomAnchor constraintEqualToAnchor:self.headerView.bottomAnchor],
-	]];
-	_table.tableHeaderView = self.headerView;
-	*/
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

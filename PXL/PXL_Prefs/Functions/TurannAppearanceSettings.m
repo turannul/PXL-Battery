@@ -1,6 +1,6 @@
 #import "Turann.h"
 
-@implementation turannAppearanceSettings
+@implementation TurannAppearanceSettings
 /*
 -(UIColor *)tintColor{
 	return [UIColor colorWithRed: 0.20 green: 1.0 blue: 0.0 alpha: 0.88];

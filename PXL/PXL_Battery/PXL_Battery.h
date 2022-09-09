@@ -6,6 +6,7 @@ UIImageView* fill;
 UIImageView* lockscreenBatteryIconView;
 UIImageView* lockscreenBatteryChargerView;
 BOOL isCharging = NO;
+BOOL customViewApplied = NO;
 double actualPercentage;
 static double percentX;
 static double percentY;
@@ -17,7 +18,7 @@ static double percentY;
 @property (nonatomic, copy, readwrite) UIColor* pinColor;
 @property (assign,nonatomic) BOOL saverModeActive;
 
-//long long _inflightBoltAnimationCount;
++(instancetype)sharedInstance;
 -(CGFloat)chargePercent;
 -(long long)chargingState;
 -(BOOL)saverModeActive;
@@ -25,11 +26,5 @@ static double percentY;
 -(void)refreshIcon;
 -(void)updateIconColor;
 -(double)getCurrentBattery;
-@end
-
-
-@interface CSBatteryFillView : UIView
-@end
-
-@interface _UIStaticBatteryView : _UIBatteryView {}
+-(void)cleanUpViews;
 @end

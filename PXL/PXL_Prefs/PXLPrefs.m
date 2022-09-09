@@ -1,12 +1,11 @@
-#import <Foundation/Foundation.h>
-#import "ryRootListController.h"
+#import "PXLPrefs.h"
 
-@implementation ryRootListController
+@implementation PXLPrefs
 
 -(instancetype)init{
 	myIcon = @"PXL";
-	myTitle = @"PXL Battery";
-	self.BundlePath=@"/Library/PreferenceBundles/pxl.bundle";
+	//myTitle = @"PXL Battery";
+	self.BundlePath=@"/Library/PreferenceBundles/PXL.bundle";
 
 
 
@@ -15,19 +14,16 @@
 }
 
 -(NSArray *)specifiers{
-	self.plistName = @"Root";
+	self.plistName = @"MainPrefs";
 	self.chosenIDs = @[@"example1", @"example2"];
 	return [super specifiers];
 }
 
 -(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier{
 	[super setPreferenceValue:value specifier:specifier];
-//	NSString *key = [specifier propertyForKey:@"key"];
 }
 
--(void)reloadSpecifiers{
-	[super reloadSpecifiers];
-}
+-(void)reloadSpecifiers{[super reloadSpecifiers];}
 
 -(void)putBool:(BOOL)putBool forKey:(NSString *)key{
 	NSMutableDictionary *preferences;
@@ -37,10 +33,6 @@
 	[preferences writeToFile:@"/var/mobile/Library/Preferences/xyz.turannul.pxlbattery.plist" atomically:YES];
 	[self reloadSpecifiers];
 }
-
--(void)source{
-	[self link:@"https://github.com/Randy-420/VolumeStep13" name:@"Github VolumeStep13/14 Source-Code"];
-} 
 
 -(void)viewWillDisappear:(BOOL)animated{
 	[super viewWillDisappear:animated];
@@ -75,8 +67,19 @@
 	[killallBackboardd launch];
 }
 
--(void)viewDidLoad{
+-(void)viewDidLoad
+{
 	[super viewDidLoad];
 	[self respringApply];
+}
+
+// Buttons
+-(void)SourceCode
+{
+    [self link:@"https://github.com/turannul/PXL-Battery" name:@"Source Code"];
+}
+-(void)Twitter
+{
+    [self link:@"https://twitter.com/ImNotTuran" name:@"My Twitter"];
 }
 @end

@@ -9,7 +9,7 @@
 -(BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end
 
-@interface turannAppearanceSettings : HBAppearanceSettings
+@interface TurannAppearanceSettings : HBAppearanceSettings
 @end
 
 @interface Turann : HBListController
@@ -18,7 +18,6 @@
 	NSString *myIcon;
 	NSString *myTitle;
 	UITableView *_table;
-	//HBAppearanceSettings *appearanceSettings;
 }
 @property (nonatomic, strong) NSArray *chosenIDs;
 @property (nonatomic, strong) NSString *plistName;
@@ -33,11 +32,9 @@
 -(void)link:(NSString *)link name:(NSString *)name;
 -(void)showMe:(NSString *)showMe after:(NSString*)after animate:(bool)animate;
 -(void)hideMe:(NSString *)hideMe animate:(bool)animate;
-//- (void)shouldEnable:(NSString *)enableMe value:(BOOL)value;
 -(NSString *)RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit;
 -(NSString *) RunCMDWithLog:(NSString *)RunCMDWithLog;
 -(void)Save;
-//-(UIImage *)imageNamed:(NSString *)name;
 @end
 
 // NSTask.h
