@@ -16,7 +16,7 @@ static BOOL GetBool(NSString *key, BOOL defaultValue) {
 }
 
 - (UIColor *)selectedColor {
-	return [UIColor colorWithRed:(4.0/255.0) green:(51.0/255.0) blue:(255.0/255.0) alpha:1.0];
+	return [UIColor colorWithRed:(182.0/255.0) green:(63.0/255.0) blue:(77.0/255.0) alpha:1.0];
 }
 
 - (bool)isSelected {

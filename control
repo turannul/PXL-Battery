@@ -1,7 +1,7 @@
 Package: xyz.turannul.pxlbattery
 Name: PXL Battery
 Depends: mobilesubstrate, ws.hbang.common (>= 1.17), com.opa334.ccsupport, firmware (>= 13.0)
-Version: 1.0.0
+Version: 1.0.1
 Architecture: iphoneos-arm
 Description: Battery indicator
 Maintainer: turannul

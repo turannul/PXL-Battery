@@ -3,9 +3,7 @@ export TARGET = iphone:clang:14.8:13.0
 export SYSROOT = $(THEOS)/sdks/iPhoneOS14.4.sdk
 
 THEOS_DEVICE_IP= 1.1.1.9 #127.0.0.1 is another option but wired
-THEOS_DEVICE_PORT= 22 #unc0ver 
-#2222 Taurine/Odyssey(ra1n) 
-#44 checkra1n
+THEOS_DEVICE_PORT= 22 #2222 For Taurine/Odyssey[ra1n]
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 SUBPROJECTS += PXL/PXL_Battery           #%80 Completed.
