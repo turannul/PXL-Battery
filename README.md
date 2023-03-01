@@ -1,3 +1,4 @@
+![Status](https://img.shields.io/appveyor/job/build/turannul/PXL-Battery/Build?style=plastic)
 # PXL-Battery 
  Battery theme for jailbroken iDevices.
 

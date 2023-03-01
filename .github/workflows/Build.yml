@@ -1,0 +1,56 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install homebrew & Install Requirements (ldid,make,xz) #Installing make because >> https://theos.dev/docs/parallel-building <<
+        run: |
+            printf "\033[33m ==> \033[0m Downloading and installing Homebrew\n" && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1 && printf "\033[32m ==> \033[0m Homebrew successfully installed\n" || printf "\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)\n"
+            printf "\033[33m ==> \033[0m Downloading and installing ldid\n" && brew install ldid > /dev/null 2>&1 && printf "\033[32m ==> \033[0m ldid successfully installed\n" || printf "\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)"
+            printf "\033[33m ==> \033[0m Downloading and installing make\n" && brew install make > /dev/null 2>&1 &&  echo PATH=\"$(brew --prefix make)/libexec/gnubin:\$PATH\" >> .env && printf "\033[32m ==> \033[0m make successfully installed\n" || printf "\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)"
+
+      - name: Install Theos
+        uses: actions/checkout@v3
+        with:
+          repository: theos/theos
+          path: theos
+          submodules: recursive
+
+      - name: Export Theos Install # Do not remove this step its critical.
+        run: |
+          echo "export THEOS=${{ github.workspace }}/theos" >> .env
+
+      - name: Download iPhoneOS 14.1 SDK # Download SDKs
+        run: |
+          cd ${{ github.workspace }}/theos/sdks
+          printf "\033[33m ==> \033[0m Downloading and installing SDK\n" && wget https://www.dropbox.com/s/jvonok3de24ibsz/14.1.zip > /dev/null 2>&1 && unzip 14.1.zip > /dev/null 2>&1 && printf "\033[32m ==> \033[0m SDK successfully installed\n" || printf "\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)"
+          
+      - name: Download SparkColourPicker
+        run: |
+          printf "\033[33m ==> \033[0m Downloading and installing Spark Colour Picker Header [1/2]\n" && wget https://raw.githubusercontent.com/SparkDev97/libSparkColourPicker/master/headers/SparkColourPickerView.h -O ${{ github.workspace }}/theos/include/SparkColourPickerView.h > /dev/null 2>&1 && printf "\n\033[32m ==> \033[0m Spark Colour Picker Header [1/2] successfully installed\n" || printf "\n\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)"
+          printf "\033[33m ==> \033[0m Downloading and installing Spark Colour Picker Header [2/2]\n" && wget https://raw.githubusercontent.com/SparkDev97/libSparkColourPicker/master/headers/SparkColourPickerUtils.h -O ${{ github.workspace }}/theos/include/SparkColourPickerUtils.h > /dev/null 2>&1 && printf "\n\033[32m ==> \033[0m Spark Colour Picker Header [2/2] successfully installed\n" || printf "\n\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)"
+          printf "\033[33m ==> \033[0m Downloading and installing SparkColourPicker Library\n" && wget https://raw.githubusercontent.com/SparkDev97/libSparkColourPicker/master/lib/libsparkcolourpicker.dylib -O ${{ github.workspace }}/theos/lib/libsparkcolourpicker.dylib > /dev/null 2>&1 && sudo chmod 755 ${{ github.workspace }}/theos/lib/libsparkcolourpicker.dylib && printf "\n\033[32m ==> \033[0m Spark Colour Picker Library successfully installed\n" || printf "\n\033[31m ==> \033[0m Oops! something goes wrong. (check logs for details)"
+
+      - name: Build Tweak
+        run: |
+          source .env
+          make clean package
+          cp packages/*.deb ${{ github.workspace }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: PXL.deb # Name of .deb file shown on first page
+          path: |
+            packages/*.deb
