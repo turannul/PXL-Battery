@@ -1,0 +1,12 @@
+Package: xyz.turannul.pxlbattery
+Name: PXL Battery
+Pre-Depends: firmware (>= 12.0), mobilesubstrate
+Depends: ws.hbang.common (>= 1.17), com.spark.libsparkcolourpicker
+Recommends: com.opa334.ccsupport
+Version: 2.0
+Architecture: iphoneos-arm
+Description: Battery indicator
+Maintainer: Turann_
+Author: Turann_ x Randy420
+Section: Tweaks
+Icon: https://turannul.github.io/home/resources/PXL.png

@@ -36,74 +36,120 @@
 			<key>label</key>
 			<string>Enabled</string>
 		</dict>
-					<!---
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Color options</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 		</dict>
 		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
+			<key>PostNotification</key>
+			<string>xyz.turannul.pxlbattery.settingschanged</string>
+			<key>defaults</key> <!-- This key fixes creating <(null)>.plist -->
+			<string>xyz.turannul.pxlbattery</string>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>detail</key>
-			<string>PXLDebug</string>
-			<key>isController</key>
-			<true/>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>libsparkcolourpicker</key>
+				<dict>
+					<key>defaults</key> <!-- This key fixes creating BatteryColor.plist -->
+					<string>xyz.turannul.pxlbattery</string>
+					<key>fallback</key>
+					<string>#FFFFFF</string>
+					<key>alpha</key>
+					<true/>
+					<key>PreviewGradient</key>
+					<false/>
+				</dict>
 			<key>label</key>
-			<string>Debug 🐛 </string>
+			<string>Battery Color</string>
+			<key>key</key>
+			<string>BatteryColor</string>
 		</dict>
-		--->
+		<dict>
+			<key>PostNotification</key>
+			<string>xyz.turannul.pxlbattery.settingschanged</string>
+			<key>defaults</key> <!-- This key fixes creating <(null)>.plist -->
+			<string>xyz.turannul.pxlbattery</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>libsparkcolourpicker</key>
+				<dict>
+					<key>defaults</key> <!-- This key fixes creating LowBatteryColor.plist -->
+					<string>xyz.turannul.pxlbattery</string>
+					<key>fallback</key>
+					<string>#EA3323</string>
+					<key>alpha</key>
+					<true/>
+					<key>PreviewGradient</key>
+					<false/>
+				</dict>
+				<key>label</key>
+				<string>Low Battery Color</string>
+				<key>key</key>
+				<string>LowBatteryColor</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>xyz.turannul.pxlbattery.settingschanged</string>
+			<key>defaults</key> <!-- This key fixes creating <(null)>.plist -->
+			<string>xyz.turannul.pxlbattery</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>libsparkcolourpicker</key>
+				<dict>
+					<key>defaults</key> <!-- This key fixes creating LowPowerModeColor.plist -->
+					<string>xyz.turannul.pxlbattery</string>
+					<key>fallback</key>
+					<string>#FFCC02</string>
+					<key>alpha</key>
+					<true/>
+					<key>PreviewGradient</key>
+					<false/>
+				</dict>
+			<key>label</key>
+			<string>Low Power Mode Color</string>
+			<key>key</key>
+			<string>LowPowerModeColor</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>xyz.turannul.pxlbattery.settingschanged</string>
+			<key>defaults</key> <!-- This key fixes creating <(null)>.plist -->
+			<string>xyz.turannul.pxlbattery</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SparkColourPickerCell</string>
+			<key>libsparkcolourpicker</key>
+				<dict>
+					<key>defaults</key> <!-- This key fixes creating ChargingColor.plist -->
+					<string>xyz.turannul.pxlbattery</string>
+					<key>fallback</key>
+					<string>#00FF0C</string>
+					<key>alpha</key>
+					<true/>
+					<key>PreviewGradient</key>
+					<false/>
+				</dict>
+			<key>label</key>
+			<string>Charging Color</string>
+			<key>key</key>
+			<string>ChargingColor</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
@@ -121,14 +167,72 @@
 			<string>Source Code</string>
 		</dict>
 		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
 			<key>action</key>
 			<string>Twitter</string>
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>icon</key>
 			<string>Twitter.png</string>
+			<key>id</key>
+			<string>Buttom</string>
 			<key>label</key>
-			<string>My Twitter</string>
+			<string>Follow me on Twitter</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>DonateMe</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>CashApp.png</string>
+			<key>id</key>
+			<string>Buttom</string>
+			<key>label</key>
+			<string>Buy a coffee?</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>RandyTwitter</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>Twitter.png</string>
+			<key>id</key>
+			<string>Buttom</string>
+			<key>label</key>
+			<string>Follow Randy</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>DonatetoRandy420</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>PayPal.png</string>
+			<key>id</key>
+			<string>Buttom</string>
+			<key>label</key>
+			<string>Donate Randy420</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>resetPrefs</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Reset Preferences</string>
 		</dict>
 	</array>
 </dict>

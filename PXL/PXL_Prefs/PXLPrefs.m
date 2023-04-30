@@ -4,10 +4,7 @@
 
 -(instancetype)init{
 	myIcon = @"PXL";
-	//myTitle = @"PXL Battery";
 	self.BundlePath=@"/Library/PreferenceBundles/PXL.bundle";
-
-
 
 	self = [super init];
 	return self;
@@ -15,23 +12,7 @@
 
 -(NSArray *)specifiers{
 	self.plistName = @"MainPrefs";
-	self.chosenIDs = @[@"example1", @"example2"];
 	return [super specifiers];
-}
-
--(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier{
-	[super setPreferenceValue:value specifier:specifier];
-}
-
--(void)reloadSpecifiers{[super reloadSpecifiers];}
-
--(void)putBool:(BOOL)putBool forKey:(NSString *)key{
-	NSMutableDictionary *preferences;
-	preferences = [[NSMutableDictionary alloc] init];
-
-	[preferences setObject:[NSNumber numberWithBool:putBool] forKey:key];
-	[preferences writeToFile:@"/var/mobile/Library/Preferences/xyz.turannul.pxlbattery.plist" atomically:YES];
-	[self reloadSpecifiers];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -60,11 +41,36 @@
 	}
 }
 
+- (void)resetPrefs {
+    UIBarButtonItem *resetButton = [[UIBarButtonItem alloc] initWithTitle:@"Reset Preferences" style:UIBarButtonItemStylePlain target:self action:@selector(resetConfirm)];
+   	resetButton.tintColor = [UIColor redColor];
+    self.navigationItem.rightBarButtonItem = resetButton;
+}
+
+- (void)resetConfirm {
+    if ([self.navigationItem.rightBarButtonItem.title isEqualToString:@"Are you sure?"]) {
+        [self resetprefs]; [self reloadSpecifiers];
+		for (int i = 3; i > 0; i--) { dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((3-i) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ self.navigationItem.rightBarButtonItem.title = [NSString stringWithFormat:@"Respringing in %d", i]; }); if (i == 1) { dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ [self respring]; }); } }
+    } else {
+        self.navigationItem.rightBarButtonItem.title = @"Are you sure?";
+		self.navigationItem.rightBarButtonItem.tintColor = [UIColor redColor];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ [self respringApply]; // dispatch waits 5 seconds if user not presses reset prefs reset prefs text will be gone, calling RespringApply again.
+        });
+    }
+}
+
 -(void)respring{
 	NSTask *killallBackboardd = [NSTask new];
 	[killallBackboardd setLaunchPath:@"/usr/bin/killall"];
-	[killallBackboardd setArguments:@[@"-9", @"backboardd"]];
+	[killallBackboardd setArguments:@[@"-9", @"SpringBoard"]];
 	[killallBackboardd launch];
+}
+
+-(void)resetprefs{
+	NSTask *resetprefs = [NSTask new];
+	[resetprefs setLaunchPath:@"/bin/rm"];
+	[resetprefs setArguments:@[@"-f", @"/var/mobile/Library/Preferences/xyz.turannul.pxlbattery.plist"]];
+	[resetprefs launch];
 }
 
 -(void)viewDidLoad
@@ -74,12 +80,9 @@
 }
 
 // Buttons
--(void)SourceCode
-{
-    [self link:@"https://github.com/turannul/PXL-Battery" name:@"Source Code"];
-}
--(void)Twitter
-{
-    [self link:@"https://twitter.com/ImNotTuran" name:@"My Twitter"];
-}
+-(void)SourceCode { [self link:@"https://github.com/turannul/PXL-Battery" name:@"Source Code"]; }
+-(void)Twitter { [self link:@"https://twitter.com/ImNotTuran" name:@"Follow me on Twitter"]; }
+-(void)DonateMe { [self link:@"https://cash.app/$TuranUl" name:@"Donate"]; }
+-(void)RandyTwitter { [self link:@"https://twitter.com/rj_skins?s=21&t=YudSBh0iDY9C5zQIsJbXcA" name:@"Follow Randy on Twitter"]; }
+-(void)DonatetoRandy420 { [self link:@"https://www.paypal.com/paypalme/4Randy420" name:@"Donate to Randy"]; }
 @end

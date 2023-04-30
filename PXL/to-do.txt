@@ -1,0 +1,8 @@
+To-Do List 
+// Idea 1: Ability to set Fake Battery Percentage
+// Idea 2: Ability to show detailed battery information
+// Idea 3: ???
+- (void)Think
+{
+    // How it works?
+}

@@ -2,5 +2,5 @@
 # PXL-Battery 
  Battery theme for jailbroken iDevices.
 
-# Bugs: No known bug
+# Bugs: Battery color if the background color the same battery icon can't be seen easily.
 "Your next bug is not a bug, it's a feature." - Apple Inc.
