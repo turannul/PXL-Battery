@@ -3,7 +3,7 @@ Name: PXL Battery
 Pre-Depends: firmware (>= 12.0), mobilesubstrate
 Depends: ws.hbang.common (>= 1.17), com.spark.libsparkcolourpicker
 Recommends: com.opa334.ccsupport
-Version: 2.0
+Version: 2.0.1
 Architecture: iphoneos-arm
 Description: Battery indicator
 Maintainer: Turann_

@@ -170,11 +170,11 @@ static void loader(){
 				fill.backgroundColor = BatteryColor;  
 			else 
 				fill.backgroundColor = LowBatteryColor;
-					[self addSubview:fill];
 			}
 		}
+		[self addSubview:fill];
 	}
-		}
+}
 //-----------------------------------------------
 //Loading Frame
 	if (actualPercentage >= 6)
