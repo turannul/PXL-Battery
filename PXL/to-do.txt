@@ -1,7 +1,9 @@
 To-Do List 
 // Idea 1: Ability to set Fake Battery Percentage
 // Idea 2: Ability to show detailed battery information
-// Idea 3: ???
+Idea 3: Charging effect tickCt++ during charging
+to-do Finish Preferences + Make a welcome (first view in settings)
+
 - (void)Think
 {
     // How it works?
