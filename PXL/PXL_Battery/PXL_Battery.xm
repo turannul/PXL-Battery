@@ -1,47 +1,26 @@
 #import "PXL_Battery.h"
-
-static NSString *GetNSString(NSString *pkey, NSString *defaultValue){
-	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", @kPrefDomain]];
-	
-	return [Dict objectForKey:pkey] ? [Dict objectForKey:pkey] : defaultValue;
-}
-
-static BOOL GetBool(NSString *pkey, BOOL defaultValue){
-	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", @kPrefDomain]];
-
-	return [Dict objectForKey:pkey] ? [[Dict objectForKey:pkey] boolValue] : defaultValue;
-}
-
-static void loader(){
-	PXLEnabled = GetBool(@"pxlEnabled", YES);
-
-	NSString *Color = GetNSString(@"BatteryColor", @"#FFFFFF");
-	BatteryColor = [SparkColourPickerUtils colourWithString:Color withFallback:@"#FFFFFF"];
-
-	Color = GetNSString(@"LowPowerModeColor", @"#FFCC02");
-	LowPowerModeColor = [SparkColourPickerUtils colourWithString:Color withFallback:@"#FFCC02"];
-
-	Color = GetNSString(@"LowBatteryColor", @"#EA3323");
-	LowBatteryColor = [SparkColourPickerUtils colourWithString:Color withFallback:@"#EA3323"];
-
-	Color = GetNSString(@"ChargingColor", @"#00FF0C");
-	ChargingColor = [SparkColourPickerUtils colourWithString:Color withFallback:@"#00FF0C"];
-}
+#import "statics.h"
 
 %group PXLBattery // Here go again
-%hook _UIStaticBatteryView// Control Center Battery
--(bool) _showsInlineChargingIndicator{return PXLEnabled?NO:%orig;} // Hide charging bolt
--(bool) _shouldShowBolt{return PXLEnabled?NO:%orig;} // Hide charging bolt x2
--(id) bodyColor{return PXLEnabled?[UIColor clearColor]:%orig;} // Hide the body
--(CGFloat) bodyColorAlpha{return PXLEnabled?0.0:%orig;}// Hide the body x2
--(id) pinColor{return PXLEnabled?[UIColor clearColor]:%orig;}// Hide the pin
--(CGFloat) pinColorAlpha{return PXLEnabled?0.0:%orig;} // Hide battery pin x2
--(id) _batteryFillColor{return PXLEnabled?[UIColor clearColor]:%orig;} // Hide the fill
-
--(void)_updateFillLayer{
-	PXLEnabled?[self refreshIcon]:%orig; 
+%hook UIStatusBar_Modern
+-(NSInteger)_effectiveStyleFromStyle:(NSInteger)arg1 {
+    statusBarDark = (arg1 != 1); // 1 = Dark, 0 = Light.
+    BatteryColor = statusBarDark ? [UIColor blackColor] : [UIColor whiteColor];
+	//NSLog(@"Is the statusBarDark: %d", statusBarDark);
+	return %orig;  // We don't want to interrupt how system works we adapting to it.
 }
 %end
+
+
+%hook _UIStaticBatteryView // Control Center Battery
+-(bool) _showsInlineChargingIndicator { return PXLEnabled ? NO : %orig; }     // Hide charging bolt
+-(bool) _shouldShowBolt { return PXLEnabled ? NO : %orig; }                   // Hide charging bolt x2
+-(id) bodyColor { return PXLEnabled ? [UIColor clearColor] : %orig; }         // Hide the body
+-(id) pinColor { return PXLEnabled ? [UIColor clearColor] : %orig; }          // Hide the pin
+-(id) _batteryFillColor { return PXLEnabled ? [UIColor clearColor] : %orig; } // Hide the fill
+-(void)_updateFillLayer { PXLEnabled ? [self refreshIcon] : %orig; }          // Call refreshIcon method
+%end
+
 %hook _UIBatteryView // SpringBoard Battery
 %new
 + (instancetype)sharedInstance{
@@ -53,29 +32,51 @@ static void loader(){
 	return sharedInstance;
 }
 
--(BOOL)_showsInlineChargingIndicator{return PXLEnabled?NO:%orig;} // Hide charging bolt
--(BOOL)_shouldShowBolt{return PXLEnabled?NO:%orig;} // Hide charging bolt x2
--(id)bodyColor{return PXLEnabled?[UIColor clearColor]:%orig;} // Hide the body
--(CGFloat)bodyColorAlpha{return PXLEnabled?0.0:%orig;}// Hide the body x2
--(id)pinColor{return PXLEnabled?[UIColor clearColor]:%orig;}// Hide the pin
--(CGFloat)pinColorAlpha{return PXLEnabled?0.0:%orig;} // Hide the pin x2
--(id)_batteryFillColor{return PXLEnabled?[UIColor clearColor]:%orig;} // Hide the fill
+-(bool) _showsInlineChargingIndicator { return PXLEnabled ? NO : %orig; }     // Hide charging bolt
+-(bool) _shouldShowBolt { return PXLEnabled ? NO : %orig; }                   // Hide charging bolt x2
+-(id) bodyColor { return PXLEnabled ? [UIColor clearColor] : %orig; }         // Hide the body
+-(id) pinColor { return PXLEnabled ? [UIColor clearColor] : %orig; }          // Hide the pin
+-(id) _batteryFillColor { return PXLEnabled ? [UIColor clearColor] : %orig; } // Hide the fill
 
 //-----------------------------------------------
 //Keep updating view
+-(void)_updateFillLayer {
+    if (!PXLEnabled) {
+        %orig;
+        return;
+    }
 
--(void)_updateFillLayer{
-	if (PXLEnabled)
-		[self refreshIcon];
-	else
-		%orig;
-}
+    [self refreshIcon];
+
+	// TODO: make same animation for < 6% * How to animate frame?
+	// Charging effect
+	// Almost complete animation.
+	BOOL ChrgAnim = (actualPercentage >= 6) && (actualPercentage != 100) && (isCharging);
+	BOOL LowPwrAnim = (actualPercentage <= 20) && (!isCharging);
+	if (ChrgAnim || LowPwrAnim) {
+        NSInteger tickCount = (NSInteger)(actualPercentage / 20);
+			NSMutableArray *subviewsToAnimate = [NSMutableArray array];
+			for (UIView *subview in self.subviews) {
+				if (![subview isKindOfClass:[UIImageView class]]) {[subviewsToAnimate addObject:subview];}}
+			__block NSInteger ticksToShow = 0;
+			NSTimer *animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+				for (NSInteger i = 0; i < subviewsToAnimate.count; i++) {
+					UIView *subview = subviewsToAnimate[i];
+					dispatch_async(dispatch_get_main_queue(), ^{ subview.hidden = (i >= ticksToShow); });}
+				if (ticksToShow < tickCount) { ticksToShow++; } else { ticksToShow--; }}];
+			[[NSRunLoop currentRunLoop] addTimer:animationTimer forMode:NSRunLoopCommonModes];}}
+	//BOOL AnimIcon = (actualPercentage <= 6) && (!isCharging);
+	//if (AnimIcon) {
+		// Same animation on UIImageView 
+//	}
+
 // when low power mode activated
 -(void)setSaverModeActive:(bool)arg1{
 	%orig;
 	if (PXLEnabled)
 		[self refreshIcon];
 }
+
 // when charger plugged
 -(void)setChargingState:(long long)arg1{
 	%orig;
@@ -83,10 +84,10 @@ static void loader(){
 	if (PXLEnabled)
 		[self refreshIcon];
 }
+
 //-----------------------------------------------
 //Update corresponding battery percentage
--(CGFloat)chargePercent
-{
+-(CGFloat)chargePercent{
 	CGFloat orig = %orig;
 	actualPercentage = orig * 100;
 
@@ -108,90 +109,85 @@ static void loader(){
 	icon = nil;
 	fill = nil;
 
-// Frame as base64
 	[self cleanUpViews];
 
 	NSData *batteryImage = BATTERY_IMAGE;
-	NSData *batteryLowImage = BATTERY_LOW_IMAGE;
 
 	if (!icon){
 		icon = [[UIImageView alloc] initWithFrame:[self bounds]];
 		[icon setContentMode:UIViewContentModeScaleAspectFill];
 		[icon setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-		if (![icon isDescendantOfView:self])
-			[self addSubview:icon];
+		[self addSubview:icon];
 	}
-// Update tick count in battery %
+
 	float barPercent = 0.00f;
-	if (!fill){
-		int tickCt = 0;
+	int tickCt = 0;
 
-		if (actualPercentage >= 80){
-			tickCt = 5;
-			barPercent = ((actualPercentage - 80) / 20.00f);
-		}else if (actualPercentage >= 60){
-			tickCt = 4;
-			barPercent = ((actualPercentage - 60) / 20.00f);
-		}else if (actualPercentage >= 40){
-			tickCt = 3;
-			barPercent = ((actualPercentage - 40) / 20.00f);
-		}else if (actualPercentage >= 20){
-			tickCt = 2;
-			barPercent = ((actualPercentage - 20) / 20.00f);
-		}else if (actualPercentage >= 6){
-			tickCt = 1;
-			barPercent = ((actualPercentage - 6) / 14.00f);
-		}else{
-			tickCt = 0;
-		}
+	if (actualPercentage >= 80){
+		tickCt = 5;
+		barPercent = ((actualPercentage - 80) / 20.00f);
+	}else if (actualPercentage >= 60){
+		tickCt = 4;
+		barPercent = ((actualPercentage - 60) / 20.00f);
+	}else if (actualPercentage >= 40){
+		tickCt = 3;
+		barPercent = ((actualPercentage - 40) / 20.00f);
+	}else if (actualPercentage >= 20){
+		tickCt = 2;
+		barPercent = ((actualPercentage - 20) / 20.00f);
+	}else if (actualPercentage >= 6){
+		tickCt = 1;
+		barPercent = ((actualPercentage - 6) / 14.00f);
+	}
 
-		float iconLocationX = icon.frame.origin.x + 2;
-		float iconLocationY = icon.frame.origin.y + 2.75;
-		float barWidth = (icon.frame.size.width - 6) / 6;
-		float barHeight = icon.frame.size.height - 5;
+	float iconLocationX = icon.frame.origin.x + 2;
+	float iconLocationY = icon.frame.origin.y + 2.75;
+	float barWidth = (icon.frame.size.width - 6) / 6;
+	float barHeight = icon.frame.size.height - 5;
 
-		for (int i = 1; i <= tickCt; ++i){
-			UIView *fill;
-			if (i == tickCt)
-				fill = [[UIView alloc] initWithFrame: CGRectMake(iconLocationX + ((i-1)*(barWidth + 1)), iconLocationY, barWidth * barPercent, barHeight)];
-			else
-				fill = [[UIView alloc] initWithFrame: CGRectMake(iconLocationX + ((i-1)*(barWidth + 1)), iconLocationY, barWidth, barHeight)];
-			[fill setContentMode:UIViewContentModeScaleAspectFill];
-			[fill setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];	
-//-----------------------------------------------
-//Colors
-	if ([self saverModeActive]){
-		fill.backgroundColor = LowPowerModeColor;
-	} else {
-		if (isCharging){
+	for (int i = 1; i <= tickCt; ++i){
+		CGRect fillFrame = CGRectMake(iconLocationX + ((i-1)*(barWidth + 1)), iconLocationY, (i == tickCt) ? barWidth * barPercent : barWidth, barHeight);
+		UIView *fill = [[UIView alloc] initWithFrame:fillFrame];
+		[fill setContentMode:UIViewContentModeScaleAspectFill];
+		[fill setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+
+		if ([self saverModeActive]){
+			fill.backgroundColor = LowPowerModeColor;
+		}else if (isCharging){
 			fill.backgroundColor = ChargingColor;
-		} else {
+		}else if (SingleColorMode && (i >= 1 && i <= 5)){
+			fill.backgroundColor = BatteryColor;
+		}else if (i == 1 && actualPercentage >=  0){ 
+			fill.backgroundColor = Bar1;
+		}else if (i == 2 && actualPercentage >= 20){
+			fill.backgroundColor = Bar2;
+		}else if (i == 3 && actualPercentage >= 40){
+			fill.backgroundColor = Bar3;
+		}else if (i == 4 && actualPercentage >= 60){
+			fill.backgroundColor = Bar4;
+		}else if (i == 5 && actualPercentage >= 80){
+			fill.backgroundColor = Bar5;
 			if (actualPercentage >= 20)
-				fill.backgroundColor = BatteryColor;  
-			else 
+				fill.backgroundColor = BatteryColor;
+			else
 				fill.backgroundColor = LowBatteryColor;
-			}
 		}
+
 		[self addSubview:fill];
 	}
-}
-//-----------------------------------------------
-//Loading Frame
-	if (actualPercentage >= 6)
-		[icon setImage:[UIImage imageWithData:batteryImage]];
-	else
-		[icon setImage:[UIImage imageWithData:batteryLowImage]];
 
+	[icon setImage:[UIImage imageWithData:batteryImage]];
 	[self updateIconColor];
 }
+
 %new
 // Load colors in conditions
 -(void)updateIconColor{
 	if (!PXLEnabled)
 		return;
 
-icon.image = [icon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]; 
-fill.image = [fill.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	icon.image = [icon.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]; 
+	fill.image = [fill.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
 	if (![self saverModeActive]){
 		if (isCharging){
@@ -202,11 +198,11 @@ fill.image = [fill.image imageWithRenderingMode:UIImageRenderingModeAlwaysTempla
 				[icon setTintColor:BatteryColor];
 				[fill setTintColor:BatteryColor];
 			}else{
-            	[icon setTintColor:fill.backgroundColor = BatteryColor];
-                [fill setTintColor:fill.backgroundColor = LowBatteryColor];
+				[icon setTintColor:fill.backgroundColor = BatteryColor];
+				[fill setTintColor:fill.backgroundColor = LowBatteryColor];
 				if (actualPercentage >= 10){
-                    [icon setTintColor:BatteryColor];
-                    [fill setTintColor:BatteryColor];
+					[icon setTintColor:BatteryColor];
+					[fill setTintColor:BatteryColor];
 				}else{
 					[icon setTintColor:fill.backgroundColor = LowBatteryColor];
 					[fill setTintColor:fill.backgroundColor = LowBatteryColor];
@@ -237,6 +233,7 @@ Code sets both tint color of icon (frame) & fill (tick) using appropriate color 
 */
 %end
 %end
+
 %ctor{
 	loader();
 	%init(PXLBattery);

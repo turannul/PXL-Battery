@@ -5,6 +5,8 @@ INSTALL_URL="https://raw.githubusercontent.com/theos/theos/master/bin/install-th
 H1=("SparkColourPickerView.h")
 H2=("SparkColourPickerUtils.h")
 L1=("libsparkcolourpicker.dylib")
+AFFIRMATIVE=("Y" "y" "YES" "yes" "TRUE" "true")
+
 
 printf "\033[32m ==> \033[0m Hello, this is the setup required to compile PXL.\n\033[32m ==> \033[0m Please wait while we set up your environment.\n"
 
@@ -14,7 +16,6 @@ theoschk() {
     else
         printf "\033[31m ==> \033[0m It seems like THEOS is not installed or its installation path is incorrect: %s\n" "$THEOS"
         read -rp "Want to install theos? [y/n]" answer
-        AFFIRMATIVE=("Y" "y" "YES" "yes" "TRUE" "true")
         if [[ ${AFFIRMATIVE[*]} =~ $answer ]]; then
             theosinst
         else
@@ -98,7 +99,6 @@ compile_conf_m() {
     printf "\033[32m ==> \033[0m All done! You can now compile PXL :)\n"
 
     read -rp "Compile now? [y/n]: " choice
-    AFFIRMATIVE=("Y" "y" "YES" "yes" "TRUE" "true")
     if [[ ${AFFIRMATIVE[*]} =~ $choice ]]; then
         make clean package
     else

@@ -1,5 +1,5 @@
 TWEAK_NAME = PXL_Battery
-$(TWEAK_NAME)_FILES = $(wildcard *.xm) $(wildcard *.m) #$(wildcard */*.m)
+$(TWEAK_NAME)_FILES = $(wildcard *.xm) $(wildcard *.m)
 $(TWEAK_NAME)_FRAMEWORKS = UIKit
 $(TWEAK_NAME)_LIBRARIES = sparkcolourpicker
 
