@@ -18,5 +18,5 @@ include $(THEOS_MAKE_PATH)/aggregate.mk
 	
 c:
 	find . -name ".DS_Store" -delete
-	rm -rfv .theos/ build/
+	rm -rf .theos/ build/
 #Clean up using 'make c'
