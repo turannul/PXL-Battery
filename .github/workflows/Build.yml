@@ -45,8 +45,7 @@ jobs:
       - name: Build Tweak
         run: |
           source .env
-          make c && make clean package
-          make c && make clean package THEOS_PACKAGE_SCHEME=rootless           
+          make clean package      
           cp packages/*.deb ${{ github.workspace }}
 
       - name: Upload artifact
