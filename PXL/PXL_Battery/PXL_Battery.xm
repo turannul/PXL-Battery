@@ -46,11 +46,8 @@
         return;
     }
 
-    [self refreshIcon];
-
 	// TODO: make same animation for < 6% * How to animate frame?
 	// Charging effect (broken/unefficient)
-	// Almost complete animation.
 	BOOL Charging = (actualPercentage >= 6) && (actualPercentage != 100) && (isCharging);
 	BOOL LowBattery = (actualPercentage <= 20) && (!isCharging);
 	// BOOL BatteryTooLow = (actualPercentage <= 6) && (!isCharging);
@@ -65,7 +62,9 @@
 					UIView *subview = subviewsToAnimate[i];
 					dispatch_async(dispatch_get_main_queue(), ^{ subview.hidden = (i >= ticksToShow); });}
 				if (ticksToShow < tickCount) { ticksToShow++; } else { ticksToShow--; }}];
-			[[NSRunLoop currentRunLoop] addTimer:animationTimer forMode:NSRunLoopCommonModes];}}
+			[[NSRunLoop currentRunLoop] addTimer:animationTimer forMode:NSRunLoopCommonModes];}
+	[self refreshIcon];
+}
 	//if (BatteryTooLow) {
 		// Same animation on UIImageView 
 //	}
