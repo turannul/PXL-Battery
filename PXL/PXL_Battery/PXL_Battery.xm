@@ -59,7 +59,7 @@
 			NSMutableArray *subviewsToAnimate = [NSMutableArray array];
 			for (UIView *subview in self.subviews) {
 				if (![subview isKindOfClass:[UIImageView class]]) {[subviewsToAnimate addObject:subview];}}
-			__block NSInteger ticksToShow = 0;
+			__block NSInteger ticksToShow = Charging ? 5 : 0;
 			NSTimer *animationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer * _Nonnull timer) {
 				for (NSInteger i = 0; i < subviewsToAnimate.count; i++) {
 					UIView *subview = subviewsToAnimate[i];
