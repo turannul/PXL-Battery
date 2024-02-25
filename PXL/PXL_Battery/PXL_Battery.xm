@@ -49,11 +49,12 @@
     [self refreshIcon];
 
 	// TODO: make same animation for < 6% * How to animate frame?
-	// Charging effect
+	// Charging effect (broken/unefficient)
 	// Almost complete animation.
-	BOOL ChrgAnim = (actualPercentage >= 6) && (actualPercentage != 100) && (isCharging);
-	BOOL LowPwrAnim = (actualPercentage <= 20) && (!isCharging);
-	if (ChrgAnim || LowPwrAnim) {
+	BOOL Charging = (actualPercentage >= 6) && (actualPercentage != 100) && (isCharging);
+	BOOL LowBattery = (actualPercentage <= 20) && (!isCharging);
+	// BOOL BatteryTooLow = (actualPercentage <= 6) && (!isCharging);
+	if (Charging || LowBattery) {
         NSInteger tickCount = (NSInteger)(actualPercentage / 20);
 			NSMutableArray *subviewsToAnimate = [NSMutableArray array];
 			for (UIView *subview in self.subviews) {
@@ -65,8 +66,7 @@
 					dispatch_async(dispatch_get_main_queue(), ^{ subview.hidden = (i >= ticksToShow); });}
 				if (ticksToShow < tickCount) { ticksToShow++; } else { ticksToShow--; }}];
 			[[NSRunLoop currentRunLoop] addTimer:animationTimer forMode:NSRunLoopCommonModes];}}
-	//BOOL AnimIcon = (actualPercentage <= 6) && (!isCharging);
-	//if (AnimIcon) {
+	//if (BatteryTooLow) {
 		// Same animation on UIImageView 
 //	}
 
