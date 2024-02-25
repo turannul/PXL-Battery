@@ -1,11 +1,13 @@
-Package: xyz.turannul.pxlbattery-reborn
-Name: PXL Battery reloaded
+Package: xyz.turannul.pxlreborn
+Name: PXL Reborn
+Replaces: xyz.turannul.pxlbattery
+Conflicts: xyz.turannul.pxlbattery
 Pre-Depends: firmware (>= 12.0)
 Depends: ws.hbang.common (>= 1.17), com.spark.libsparkcolourpicker, mobilesubstrate, preferenceloader | com.artikus.preferenceloader
 Recommends: com.opa334.ccsupport
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: A battery indicator just like old phones.
+Description: An awesome MobileSubstrate sayk, A battery indicator just like classic phones.
 Maintainer: Turann_
 Author: Turann_ x Randy420
 Section: Tweaks

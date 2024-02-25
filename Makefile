@@ -20,3 +20,6 @@ c:
 	find . -name ".DS_Store" -delete
 	rm -rf .theos/ build/
 #Clean up using 'make c'
+
+after-install::
+	install.exec killall -9 SpringBoard
