@@ -1,22 +1,30 @@
 #define kPrefDomain "xyz.turannul.pxlbattery"
 #include "SparkColourPickerUtils.h"
-#import "Battery_Images.h"
+#import "batteryFrame_img.h"
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <QuartzCore/CoreAnimation.h>
 #import <QuartzCore/QuartzCore.h>
-#import <Foundation/Foundation.h>
 
-UIImageView* icon;
-UIImageView* fill;
-UIImageView* lockscreenBatteryIconView;
-UIImageView* lockscreenBatteryChargerView;
+UIImageView* batteryIcon;
+UIColor *batteryIcon_TintColor = nil;
+UIImageView* batteryBar;
+UIColor *batteryBar_TintColor = nil;
+
+float batteryBar_Percentage = 0.00f;
+int batteryBar_Count = 0;
+int batteryBar_thresholds[] = { 6, 20, 40, 60, 80 };
+int batteryBar_array[] = { 1, 2, 3, 4, 5 };
+
+float batteryFrameLocation_X = batteryIcon.frame.origin.x + 2;
+float batteryFrameLocation_Y = batteryIcon.frame.origin.y + 2.75;
+
+NSData *batteryFrame_img = frame_img_data;
 
 UIColor *LowPowerModeColor;
 UIColor *ChargingColor;
 UIColor *LowBatteryColor;
 UIColor *BatteryColor;
-UIColor *batteryColorDark;
-UIColor *batteryColorLight;
 UIColor *Bar1;
 UIColor *Bar2;
 UIColor *Bar3;
@@ -26,13 +34,14 @@ UIColor *Bar5;
 BOOL isCharging = NO;
 BOOL PXLEnabled;
 BOOL SingleColorMode;
-BOOL statusBarDark;
+BOOL StatusBarStyle;
 
-double actualPercentage;
+double BatteryLevel;
 static double percentX;
 static double percentY;
+long long current_Style;
 
-@interface _UIBatteryView : UIView{}
+@interface _UIBatteryView : UIView {}
 
 @property (nonatomic, copy, readwrite) UIColor* fillColor;
 @property (nonatomic, copy, readwrite) UIColor* bodyColor;
@@ -42,11 +51,8 @@ static double percentY;
 +(instancetype)sharedInstance;
 -(CGFloat)chargePercent;
 -(long long)chargingState;
--(double)getCurrentBattery;
 -(BOOL)saverModeActive;
--(BOOL)isLowBattery;
--(void)refreshIcon;
--(void)animateSubviewsSequentially:(NSArray *)subviews index:(NSUInteger)index delay:(NSTimeInterval)delay;
--(void)updateIconColor;
+-(void)Refresh_batteryIcon;
+-(void)Refresh_batteryIcon_Color;
 -(void)cleanUpViews;
 @end

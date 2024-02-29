@@ -96,14 +96,6 @@
 	[self respringApply];
 }
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
-    [super setPreferenceValue:value specifier:specifier];
-}
-
-- (void)reloadSpecifiers {
-    [super reloadSpecifiers];
-}
-
 // Buttons
 -(void)SourceCode { [self link:@"https://github.com/turannul/PXL-Battery" name:@"Source Code"]; }
 -(void)Twitter { [self link:@"https://twitter.com/ImNotTuran" name:@"Follow me on Twitter"]; }

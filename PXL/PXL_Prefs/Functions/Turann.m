@@ -42,14 +42,7 @@ extern char **environ;
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {
-		self.chosenIDs = [[NSMutableArray alloc] init];
 		_specifiers = [self loadSpecifiersFromPlistName:self.plistName target:self];
-
-		for (PSSpecifier *specifier in _specifiers) {
-			NSString *specifierID = [specifier propertyForKey:@"id"];
-			if (specifierID)
-				[self.chosenIDs addObject:specifierID];
-		}
 
 		self.savedSpecifiers = [NSMutableDictionary dictionary];
 		for(PSSpecifier *specifier in _specifiers){

@@ -25,7 +25,7 @@ static void loader(){
 	UIStatusBarManager *statusBarManager = [UIApplication sharedApplication].windows.firstObject.windowScene.statusBarManager;
 	UIStatusBarStyle statusBarStyle = statusBarManager.statusBarStyle;
 
-	statusBarDark = statusBarStyle != UIStatusBarStyleLightContent;
+	StatusBarStyle = statusBarStyle != UIStatusBarStyleLightContent;
 
 	UIColor *colorValues[] = {
 		[SparkColourPickerUtils colourWithString:GetNSString(@"BatteryColor", @"#FFFFFF") withFallback:@"#FFFFFF"],
@@ -44,7 +44,7 @@ static void loader(){
 	for (NSUInteger i = 0; i < numberOfColors; i++) {
 		UIColor *currentColor = colorValues[i];
 
-		if (!statusBarDark)
+		if (!StatusBarStyle)
 			currentColor = invertColor(currentColor);
 
 		// Assign the color variable based on the index 'i'
@@ -75,8 +75,6 @@ static void loader(){
 				break;
 			case 8:
 				Bar5 = currentColor;
-				break;
-			default:
 				break;
 		}
 	}

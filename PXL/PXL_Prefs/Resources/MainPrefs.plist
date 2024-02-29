@@ -42,25 +42,9 @@
             <key>defaults</key>
             <string>xyz.turannul.pxlbattery</string>
             <key>id</key>
-            <string>hideLSCharging</string>
-            <key>key</key>
-            <string>hideCharging</string>
-            <key>label</key>
-            <string>Hide Lock Screen View</string>
-        </dict>
-        <dict>
-            <key>PostNotification</key>
-            <string>xyz.turannul.pxlbattery.settingschanged</string>
-            <key>cell</key>
-            <string>PSSwitchCell</string>
-            <key>default</key>
-            <true/>
-            <key>defaults</key>
-            <string>xyz.turannul.pxlbattery</string>
-            <key>id</key>
             <string>swtch_custom_ticks</string>
             <key>key</key>
-            <string>CustomTicks</string>
+            <string>SingleColorMode</string>
             <key>label</key>
             <string>Custom Tick color</string>
         </dict>
@@ -113,7 +97,7 @@
                 <key>defaults</key>
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
-                <string>#FFFFFF</string>
+                <string>#FF0000</string>
                 <key>alpha</key>
                 <true/>
                 <key>PreviewGradient</key>
@@ -140,7 +124,7 @@
                 <key>defaults</key>
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
-                <string>#FFFFFF</string>
+                <string>#FF8000</string>
                 <key>alpha</key>
                 <true/>
                 <key>PreviewGradient</key>
@@ -167,7 +151,7 @@
                 <key>defaults</key>
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
-                <string>#FFFFFF</string>
+                <string>#FFFF00</string>
                 <key>alpha</key>
                 <true/>
                 <key>PreviewGradient</key>
@@ -194,7 +178,7 @@
                 <key>defaults</key>
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
-                <string>#FFFFFF</string>
+                <string>#80FF00</string>
                 <key>alpha</key>
                 <true/>
                 <key>PreviewGradient</key>
@@ -218,10 +202,10 @@
             <string>SparkColourPickerCell</string>
             <key>libsparkcolourpicker</key>
             <dict>
-					<key>defaults</key> <!-- This key fixes creating BatteryColor.plist -->
+				<key>defaults</key> <!-- This key fixes creating BatteryColor.plist -->
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
-                <string>#FFFFFF</string>
+                <string>#00FF00</string>
                 <key>alpha</key>
                 <true/>
                 <key>PreviewGradient</key>
@@ -245,7 +229,7 @@
             <string>SparkColourPickerCell</string>
             <key>libsparkcolourpicker</key>
             <dict>
-					<key>defaults</key> <!-- This key fixes creating LowBatteryColor.plist -->
+				<key>defaults</key> <!-- This key fixes creating LowBatteryColor.plist -->
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
                 <string>#EA3323</string>
@@ -272,7 +256,7 @@
             <string>SparkColourPickerCell</string>
             <key>libsparkcolourpicker</key>
             <dict>
-					<key>defaults</key> <!-- This key fixes creating LowPowerModeColor.plist -->
+				<key>defaults</key> <!-- This key fixes creating LowPowerModeColor.plist -->
                 <string>xyz.turannul.pxlbattery</string>
                 <key>fallback</key>
                 <string>#FFCC02</string>
@@ -298,7 +282,7 @@
             <key>cellClass</key>
             <string>SparkColourPickerCell</string>
             <key>libsparkcolourpicker</key>
-            <dict>
+                <dict>
 					<key>defaults</key> <!-- This key fixes creating ChargingColor.plist -->
 					<string>xyz.turannul.pxlbattery</string>
 					<key>fallback</key>
