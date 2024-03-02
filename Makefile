@@ -6,9 +6,9 @@ FINALPACKAGE = 0
 DEBUG = 1
 
 INSTALL_TARGET_PROCESSES = Preferences SpringBoard
-SUBPROJECTS += PXL/PXL_Battery # It works but preferences doesn't, animations either... :(
-SUBPROJECTS += PXL/PXL_CC      # It works but has no animation, which i wanted...
-#SUBPROJECTS += PXL/PXL_Prefs   # Completely broken
+SUBPROJECTS += src/Battery           # It works but preferences doesn't, animations either... :(
+SUBPROJECTS += src/ControlCenter     # It works but has no animation, which i wanted...
+SUBPROJECTS += src/Preferences       # Rebuild on process...
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/aggregate.mk
