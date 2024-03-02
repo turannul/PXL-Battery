@@ -1,4 +1,5 @@
-#define kPrefDomain "xyz.turannul.pxlbattery"
+#define kPrefDomain "xyz.turannul.PXLBattery"
+#pragma GCC diagnostic ignored "-Wunused-function"
 #include "SparkColourPickerUtils.h"
 #import "batteryFrame_img.h"
 #import <Foundation/Foundation.h>
@@ -31,7 +32,7 @@ UIColor *Bar3;
 UIColor *Bar4;
 UIColor *Bar5;
 
-BOOL isCharging = NO;
+BOOL isCharging;
 BOOL PXLEnabled;
 BOOL SingleColorMode;
 BOOL StatusBarStyle;
@@ -39,7 +40,6 @@ BOOL StatusBarStyle;
 double BatteryLevel;
 static double percentX;
 static double percentY;
-long long current_Style;
 
 @interface _UIBatteryView : UIView {}
 

@@ -1,12 +1,22 @@
 #import "PXL_Battery.h"
 
+static NSString *GetPrefsPath(){
+    NSString *PrefsPath;
+    if (@available(iOS 15.0, *)) {
+        PrefsPath = [NSString stringWithFormat:@"/private/var/jb/var/Library/Preferences/%s.plist", kPrefDomain];
+    } else {
+        PrefsPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%s.plist", kPrefDomain];
+    }
+	//NSLog(@"PrefsPath: %@", PrefsPath);
+    return PrefsPath;
+}
 static NSString *GetNSString(NSString *pkey, NSString *defaultValue){
-	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", @kPrefDomain]];
+	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:GetPrefsPath()];
 	return [Dict objectForKey:pkey] ? [Dict objectForKey:pkey] : defaultValue;
 }
 
 static BOOL GetBool(NSString *pkey, BOOL defaultValue){
-	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", @kPrefDomain]];
+	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:GetPrefsPath()];
 	return [Dict objectForKey:pkey] ? [[Dict objectForKey:pkey] boolValue] : defaultValue;
 }
 
@@ -24,7 +34,6 @@ static void loader(){
 	SingleColorMode = GetBool(@"SingleColorMode",YES);
 	UIStatusBarManager *statusBarManager = [UIApplication sharedApplication].windows.firstObject.windowScene.statusBarManager;
 	UIStatusBarStyle statusBarStyle = statusBarManager.statusBarStyle;
-
 	StatusBarStyle = statusBarStyle != UIStatusBarStyleLightContent;
 
 	UIColor *colorValues[] = {

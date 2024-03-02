@@ -2,16 +2,6 @@
 #import "statics.h"
 
 %group PXLBattery // Here go again
-%hook UIStatusBar_Modern
--(long long)currentStyle {
-    current_Style = %orig;
-	// 3 = Light, 2 = null, 1 = unknown, 0 = Dark 
-	StatusBarStyle = current_Style != 3;
-	BatteryColor = StatusBarStyle ? [UIColor blackColor] : [UIColor whiteColor];
-    // NSLog(@"PXL method: currentStyle:%lld", current_Style); 
-	return %orig;}
-%end
-
 %hook _UIStaticBatteryView // Control Center Battery
 -(bool) _showsInlineChargingIndicator { return PXLEnabled ? NO : %orig; }     // Hide charging bolt
 -(bool) _shouldShowBolt { return PXLEnabled ? NO : %orig; }                   // Hide charging bolt x2
@@ -73,9 +63,9 @@
 - (void)Refresh_batteryIcon {
     if (!PXLEnabled) return;
 
-	[self chargePercent];
 	batteryIcon = nil;
 	batteryBar = nil;
+	[self chargePercent];
 	[self cleanUpViews];
 
 	if (!batteryIcon) {
@@ -160,6 +150,18 @@
     }
     [batteryIcon setTintColor:batteryIcon_TintColor];
     [batteryBar setTintColor:batteryBar_TintColor];
+}
+%end
+%hook UIStatusBar_Modern
+// Same methods same results, I know it's always bugging out (randomly)
+// -(long long)currentStyle:(long long)arg1 { NSLog(@"currentStyle: %lld", arg1); return %orig; }
+// -(long long)_effectiveStyleFromStyle:(long long)arg1 { NSLog(@"_effectiveStyleFromStyle: %lld", arg1); return %orig; }
+-(void)_requestStyle:(long long)arg1 partStyles:(id)arg2 legibilityStyle:(long long)arg3 foregroundColor:(id)arg4 animationParameters:(id)arg5 forced:(BOOL)arg6 {
+	// arg1 = 0 = unknown, 1 = Light, 3 = Dark
+	StatusBarStyle = (arg1 != 1); // True if items are Light or unknown (0) only.
+	BatteryColor = StatusBarStyle ? [UIColor blackColor] : [UIColor whiteColor];
+	NSLog(@"_requestStyle: %lld", arg1); // Log style
+	return %orig(arg1, arg2, arg3, arg4, arg5, arg6); // Don't modify.
 }
 %end
 %end
