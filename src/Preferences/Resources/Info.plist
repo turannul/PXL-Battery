@@ -7,18 +7,18 @@
 	<key>CFBundleExecutable</key>
 	<string>PXLPrefs</string>
 	<key>CFBundleIdentifier</key>
-	<string>xyz.turannul</string>
+	<string>xyz.turannul.PXLBattery</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.0</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSPrincipalClass</key>
-	<string>XXXRootListController</string>
+	<string>PXLPreferences</string>
 </dict>
 </plist>

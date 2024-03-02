@@ -156,7 +156,7 @@
 // Same methods same results, I know it's always bugging out (randomly)
 // -(long long)currentStyle:(long long)arg1 { NSLog(@"currentStyle: %lld", arg1); return %orig; }
 // -(long long)_effectiveStyleFromStyle:(long long)arg1 { NSLog(@"_effectiveStyleFromStyle: %lld", arg1); return %orig; }
--(void)_requestStyle:(long long)arg1 partStyles:(id)arg2 legibilityStyle:(long long)arg3 foregroundColor:(id)arg4 animationParameters:(id)arg5 forced:(BOOL)arg6 {
++(void)_requestStyle:(long long)arg1 partStyles:(id)arg2 legibilityStyle:(long long)arg3 foregroundColor:(id)arg4 animationParameters:(id)arg5 forced:(BOOL)arg6 {
 	// arg1 = 0 = unknown, 1 = Light, 3 = Dark
 	StatusBarStyle = (arg1 != 1); // True if items are Light or unknown (0) only.
 	BatteryColor = StatusBarStyle ? [UIColor blackColor] : [UIColor whiteColor];
