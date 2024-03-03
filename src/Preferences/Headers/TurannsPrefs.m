@@ -1,9 +1,9 @@
-#import "Turann.h"
+#import "TurannsPrefs.h"
 #define _POSIX_SPAWN_DISABLE_ASLR 0x0100
 #define _POSIX_SPAWN_ALLOW_DATA_EXEC 0x2000
 extern char **environ;
 
-@implementation Turann
+@implementation TurannsPrefs
 - (instancetype)init {
 	self = [super init];
 	if (self) {
@@ -42,7 +42,14 @@ extern char **environ;
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {
+		self.chosenIDs = [[NSMutableArray alloc] init];
 		_specifiers = [self loadSpecifiersFromPlistName:self.plistName target:self];
+
+		for (PSSpecifier *specifier in _specifiers) {
+			NSString *specifierID = [specifier propertyForKey:@"id"];
+			if (specifierID)
+				[self.chosenIDs addObject:specifierID];
+		}
 
 		self.savedSpecifiers = [NSMutableDictionary dictionary];
 		for(PSSpecifier *specifier in _specifiers){
@@ -53,6 +60,22 @@ extern char **environ;
 	}
 
 	return _specifiers;
+}
+
+- (void)showMe:(NSString *)showMe after: (NSString*)after animate:(bool)animate {
+	@try{
+		![self containsSpecifier: self.savedSpecifiers[showMe]] ? [self insertContiguousSpecifiers:@[self.savedSpecifiers[showMe]] afterSpecifierID: after animated: animate] : 0;
+	}@catch(NSException *exception){
+		NSLog(@"PXL_Preferences: showMe:%@ after:%@", showMe, after);
+	}
+}
+
+- (void)hideMe:(NSString *)hideMe animate:(bool)animate {
+	@try{
+		[self containsSpecifier:self.savedSpecifiers[hideMe]] ? [self removeContiguousSpecifiers:@[self.savedSpecifiers[hideMe]] animated:animate] : 0;
+	}@catch(NSException *exception){
+		NSLog(@"PXL_Preferences: hideMe:%@", hideMe);
+	}
 }
 
 -(id)readPreferenceValue:(PSSpecifier *)specifier{
@@ -121,40 +144,17 @@ extern char **environ;
 	return outputString;
 }
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
-    [super setPreferenceValue:value specifier:specifier];
-
-    if ([specifier.properties[@"id"] isEqualToString:@"swtch_custom_ticks"]) {
-        BOOL customTicksActive = [value boolValue];
-
-        PSSpecifier *batteryColorSpecifier = [self.savedSpecifiers objectForKey:@"battery_color"];
-        PSSpecifier *tick1Specifier = [self.savedSpecifiers objectForKey:@"tick_1"];
-        PSSpecifier *tick2Specifier = [self.savedSpecifiers objectForKey:@"tick_2"];
-        PSSpecifier *tick3Specifier = [self.savedSpecifiers objectForKey:@"tick_3"];
-        PSSpecifier *tick4Specifier = [self.savedSpecifiers objectForKey:@"tick_4"];
-        PSSpecifier *tick5Specifier = [self.savedSpecifiers objectForKey:@"tick_5"];
-
-        if (customTicksActive) {
-            [_specifiers insertObject:tick1Specifier atIndex:[_specifiers indexOfObject:batteryColorSpecifier] + 1];
-            [_specifiers insertObject:tick2Specifier atIndex:[_specifiers indexOfObject:batteryColorSpecifier] + 2];
-            [_specifiers insertObject:tick3Specifier atIndex:[_specifiers indexOfObject:batteryColorSpecifier] + 3];
-            [_specifiers insertObject:tick4Specifier atIndex:[_specifiers indexOfObject:batteryColorSpecifier] + 4];
-            [_specifiers insertObject:tick5Specifier atIndex:[_specifiers indexOfObject:batteryColorSpecifier] + 5];
-        } else {
-            [_specifiers removeObject:tick1Specifier];
-            [_specifiers removeObject:tick2Specifier];
-            [_specifiers removeObject:tick3Specifier];
-            [_specifiers removeObject:tick4Specifier];
-            [_specifiers removeObject:tick5Specifier];
-        }
-
-        [self reloadSpecifiers];
-    }
-
-    CFStringRef notificationName = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
-    if (notificationName) {
-        CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), notificationName, NULL, NULL, YES);
-    }
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier{
+	[super setPreferenceValue:value specifier:specifier];
+	NSString *path = [NSString stringWithFormat:@"/User/Library/Preferences/%@.plist", specifier.properties[@"defaults"]];
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:path]];
+	[settings setObject:value forKey:specifier.properties[@"key"]];
+	[settings writeToFile:path atomically:YES];
+	CFStringRef notificationName = (__bridge CFStringRef)specifier.properties[@"PostNotification"];
+	if (notificationName){
+		CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), notificationName, NULL, NULL, YES);
+	}
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -176,9 +176,7 @@ extern char **environ;
 	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 1 - offsetY);
 }
 
--(void)reloadSpecifiers{
-	[super reloadSpecifiers];
-}
+-(void)reloadSpecifiers{ [super reloadSpecifiers]; }
 
 - (void)viewDidLoad{
 	[super viewDidLoad];

@@ -2,9 +2,9 @@ TARGET := iphone:clang:latest:7.0
 
 include $(THEOS)/makefiles/common.mk
 
-BUNDLE_NAME = PXLPrefs
+BUNDLE_NAME = PXL_Preferences
 
-$(BUNDLE_NAME)_FILES = PXLPreferences.m
+$(BUNDLE_NAME)_FILES = PXL_Preferences.m $(wildcard Headers/*.m)
 $(BUNDLE_NAME)_FRAMEWORKS = UIKit
 $(BUNDLE_NAME)_PRIVATE_FRAMEWORKS = Preferences
 $(BUNDLE_NAME)_EXTRA_FRAMEWORKS += Cephei CepheiPrefs

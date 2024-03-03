@@ -24,9 +24,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>PXL_ON-OFF</string>
+	<string>PXL_CC</string>
 	<key>CFBundleIdentifier</key>
-	<string>xyz.turannul.pxlmodule</string>
+	<string>xyz.turannul.PXLBattery_CC</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -44,7 +44,7 @@
 	<key>MinimumOSVersion</key>
 	<string>7.0</string>
 	<key>NSPrincipalClass</key>
-	<string>PXLPrefs</string>
+	<string>PXLPreferences</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>

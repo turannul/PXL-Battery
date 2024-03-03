@@ -1,4 +1,4 @@
-#import "Turann.h"
+#import "TurannsPrefs.h"
 
 @implementation TurannAppearanceSettings
 /*

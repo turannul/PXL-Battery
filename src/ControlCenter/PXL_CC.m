@@ -1,13 +1,13 @@
-#import "PXL_ON-OFF.h"
+#import "PXL_CC.h"
 
-#define SETTINGS_CHANGED "xyz.turannul.pxlbattery.settingschanged"
-#define PREFS CFSTR("xyz.turannul.pxlbattery")
-#define PLIST @"/var/mobile/Library/Preferences/xyz.turannul.pxlbattery.plist"
+#define SETTINGS_CHANGED "xyz.turannul.PXLBattery.settingschanged"
+#define PREFS CFSTR("xyz.turannul.PXLBattery")
+#define PLIST @"/var/mobile/Library/Preferences/xyz.turannul.PXLBattery.plist"
 
 @implementation PXL_Switch 
 static BOOL GetBool(NSString *key, BOOL defaultValue) {
 	Boolean exists;
-	Boolean result = CFPreferencesGetAppBooleanValue((CFStringRef)key, CFSTR("xyz.turannul.pxlbattery"), &exists);
+	Boolean result = CFPreferencesGetAppBooleanValue((CFStringRef)key, CFSTR("xyz.turannul.PXLBattery"), &exists);
 	return exists ? result : defaultValue;
 }
 

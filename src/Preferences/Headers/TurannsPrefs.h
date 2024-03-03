@@ -13,7 +13,7 @@
 @interface TurannAppearanceSettings : HBAppearanceSettings
 @end
 
-@interface Turann : HBListController
+@interface TurannsPrefs : HBListController
 {
 	NSFileManager *fm;
 	NSString *myIcon;
@@ -31,6 +31,8 @@
 @property (nonatomic, retain) NSMutableDictionary *savedSpecifiers;
 
 -(void)link:(NSString *)link name:(NSString *)name;
+-(void)showMe:(NSString *)showMe after:(NSString*)after animate:(bool)animate;
+-(void)hideMe:(NSString *)hideMe animate:(bool)animate;
 -(NSString *)RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit;
 -(NSString *)RunCMDWithLog:(NSString *)RunCMDWithLog;
 -(void)Save;
@@ -42,22 +44,28 @@ static id CC(NSString *CMD) {
 
 @interface NSTask (NSTaskConveniences)
 +(NSTask *)launchedTaskWithLaunchPath:(NSString *)path arguments:(NSArray *)arguments;
-// convenience; create and launch
 -(void)waitUntilExit;
-// poll the runLoop in defaultMode until task completes
 @end
 
 FOUNDATION_EXPORT NSString * const NSTaskDidTerminateNotification;
 
-static NSString *GetNSString(NSString *pkey, NSString *defaultValue, NSString *plst){
-	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist",plst]];
-
+static NSString *GetPrefsPath(){
+    NSString *PrefsPath;
+    if (@available(iOS 15.0, *)) {
+        PrefsPath = [NSString stringWithFormat:@"/private/var/jb/var/Library/Preferences/xyz.turannul.PXLBattery.plist"];
+    } else {
+        PrefsPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/xyz.turannul.PXLBattery.plist"];
+    }
+	//NSLog(@"PrefsPath: %@", PrefsPath);
+    return PrefsPath;
+}
+static NSString *GetNSString(NSString *pkey, NSString *defaultValue){
+	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:GetPrefsPath()];
 	return [Dict objectForKey:pkey] ? [Dict objectForKey:pkey] : defaultValue;
 }
 
-static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
-	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist",plst]];
-
+static BOOL GetBool(NSString *pkey, BOOL defaultValue){
+	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:GetPrefsPath()];
 	return [Dict objectForKey:pkey] ? [[Dict objectForKey:pkey] boolValue] : defaultValue;
 }
 

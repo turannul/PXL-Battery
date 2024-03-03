@@ -1,9 +1,9 @@
 #import <Preferences/PSListController.h>
 #import <Foundation/Foundation.h>
-#import "Functions/Turann.h"
-#import "Functions/SparkColourPickerUtils.h"
+#import "Headers/TurannsPrefs.h"
+#import "SparkColourPickerUtils.h"
 
-@interface PXLPreferences : TurannSettings {}
+@interface PXLPreferences : TurannsPrefs {}
 @property (nonatomic, retain) UIBarButtonItem *respringApplyButton;
 @property (nonatomic, retain) UIBarButtonItem *respringConfirmButton;
 @end

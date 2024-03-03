@@ -6,5 +6,5 @@ to-do Finish Preferences + Make a welcome (first view in settings)
 
 - (void)Think
 {
-    // How it works?
+    return NSError* Err_404;
 }
